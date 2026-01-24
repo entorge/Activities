@@ -1,54 +1,49 @@
-(async () => {
-  const presence = new Presence('1464394386170446077')
-  let lastTitle = ''
+const presence = new Presence('1464394386170446077')
+let lastTitle = ''
 
-  const updatePresence = () => {
-    const h4Element = document.querySelector('main h4')
-    const liveContainer = document.querySelector('.live')
-    const docTitle = document.title
+presence.on('UpdateData', async () => {
+  const h4Element = document.querySelector('main h4')
+  const liveContainer = document.querySelector('.live')
+  const docTitle = document.title
 
-    let fullTitle = ''
-    let isReplay = false
+  let fullTitle = ''
+  let isReplay = false
 
-    if (h4Element && docTitle.includes(h4Element.innerText.trim())) {
-      fullTitle = h4Element.innerText.trim()
-      isReplay = true
-    } else if (liveContainer) {
-      const liveTitleElement = liveContainer.querySelector('p span')
-      fullTitle = liveTitleElement ? liveTitleElement.textContent.trim() : ''
-    }
-
-    if (!fullTitle || fullTitle === '') {
-      fullTitle = 'Browsing Events'
-    }
-
-    fullTitle = fullTitle.replace(/^['"]+|['"]+$/g, '')
-
-    if (fullTitle !== lastTitle) {
-      const parts = fullTitle.split('|').map(p => p.trim())
-      let detailsText = ''
-      let stateText = ''
-
-      if (isReplay) {
-        detailsText = parts[0]
-        stateText = parts[1] || 'Replay'
-      } else {
-        detailsText = parts[1] || parts[0]
-        stateText = parts[0]
-      }
-
-      const presenceData = {
-        type: 3,
-        details: detailsText,
-        state: stateText,
-        largeImageKey: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJT4dg-pIfsTDJ-ZeDHGhr63cJ9BcJFYOpFw&s',
-      }
-
-      presence.setActivity(presenceData)
-      lastTitle = fullTitle
-    }
+  if (h4Element && docTitle.includes(h4Element.innerText.trim())) {
+    fullTitle = h4Element.innerText.trim()
+    isReplay = true
+  } else if (liveContainer) {
+    const liveTitleElement = liveContainer.querySelector('p span')
+    fullTitle = liveTitleElement ? liveTitleElement.textContent.trim() : ''
   }
 
-  updatePresence()
-  setInterval(updatePresence, 10000)
-})()
+  if (!fullTitle || fullTitle === '') {
+    fullTitle = 'Browsing Events'
+  }
+
+  fullTitle = fullTitle.replace(/^['"]+|['"]+$/g, '')
+
+  if (fullTitle !== lastTitle) {
+    const parts = fullTitle.split('|').map((p) => p.trim())
+    let detailsText = ''
+    let stateText = ''
+
+    if (isReplay) {
+      detailsText = parts[0]
+      stateText = parts[1] || 'Replay'
+    } else {
+      detailsText = parts[1] || parts[0]
+      stateText = parts[0]
+    }
+
+    const presenceData: PresenceData = {
+      type: 3,
+      details: detailsText,
+      state: stateText,
+      largeImageKey: 'logo',
+    }
+
+    presence.setActivity(presenceData)
+    lastTitle = fullTitle
+  }
+})
