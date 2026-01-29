@@ -1,7 +1,7 @@
 const presence = new Presence('1464394386170446077')
 let lastTitle = ''
 
-presence.on('UpdateData', async () => {
+presence.on('UpdateData', () => {
   const h4Element = document.querySelector('main h4')
   const liveContainer = document.querySelector('.live')
   const docTitle = document.title
@@ -37,7 +37,8 @@ presence.on('UpdateData', async () => {
     }
 
     const presenceData: PresenceData = {
-      type: 3,
+      // Changed '3' to the official Enum
+      type: Presence.ActivityType.Watching,
       details: detailsText,
       state: stateText,
       largeImageKey: 'logo',
